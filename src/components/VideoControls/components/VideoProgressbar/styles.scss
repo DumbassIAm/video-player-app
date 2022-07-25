@@ -1,0 +1,79 @@
+@import "../../../../../assets/styles/variables/colors.scss";
+
+.vp {
+  &__progressbar {
+    position: relative;
+    margin-bottom: 20px;
+    height: 16px;
+    width: 100%;
+    cursor: pointer;
+
+    @media (hover) {
+      &:hover {
+        .vp {
+          &__progressbar {
+
+            &-progress,
+            &-background-line {
+              transform: scaleY(1.5);
+            }
+
+            &-circle {
+              transform: none;
+            }
+          }
+        }
+      }
+    }
+
+    &-lines {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 4px;
+      width: 100%;
+    }
+
+    &-progress {
+      position: absolute;
+      z-index: 1;
+      left: 0;
+      bottom: 0;
+      height: 4px;
+      width: 100%;
+      transition: transform .1s ease-in-out;
+    }
+
+    &-line {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      z-index: 1;
+      height: 4px;
+      background-color: $red-solid;
+    }
+
+    &-circle {
+      position: absolute;
+      z-index: 1;
+      left: 0;
+      top: calc(50% - 7.5px);
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background-color: $red-solid;
+      transform: scale(0);
+      transition: transform .1s linear;
+    }
+
+    &-background-line {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 4px;
+      background-color: $grey-primary;
+      transition: transform .1s ease-in-out;
+    }
+  }
+}

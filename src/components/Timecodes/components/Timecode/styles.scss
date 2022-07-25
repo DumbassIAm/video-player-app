@@ -1,0 +1,43 @@
+@import "assets/styles/utility/mixins/flex";
+@import "assets/styles/variables/colors";
+
+.episode {
+  @include flex(center, flex-start, false, 16px);
+  padding: 8px 0 8px 16px;
+  cursor: pointer;
+
+  @media (hover) {
+    &:hover {
+      background-color: rgba($white, 0.1);
+    }
+  }
+
+  &__thumbnail {
+    width: 100px;
+    height: 56px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__details {
+    @include flex(flex-start, flex-start, false, false, false, column);
+  }
+
+  &__title {
+    margin-bottom: 8px;
+    font-size: 1.4rem;
+    line-height: 2rem;
+    font-weight: 500;
+    color: $white;
+  }
+
+  &__timecode {
+    padding: 2px 6px;
+    color: $blue-secondary;
+    background-color: $blue-solid;
+  }
+}

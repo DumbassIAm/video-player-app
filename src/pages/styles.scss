@@ -1,0 +1,7 @@
+@import "assets/styles/variables/colors";
+
+.app-section {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  grid-column-gap: 40px;
+}

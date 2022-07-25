@@ -1,0 +1,28 @@
+@import "assets/styles/variables/colors";
+
+.timecodes {
+  border: 1px solid rgba($white, 0.1);
+
+  &__header {
+    padding: 4px 2px 4px 16px;
+    background-color: $black-secondary;
+  }
+
+  &__title-container {
+    margin: 10px 8px 10px 0px;
+  }
+
+  &__title {
+    h2 {
+      font-size: 1.6rem;
+      line-height: 2.2rem;
+      font-weight: 400;
+      color: $white;
+    }
+  }
+
+  &__list {
+    max-height: 500px;
+    overflow-y: auto;
+  }
+}
