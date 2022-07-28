@@ -1,7 +1,7 @@
 @import "assets/styles/utility/mixins/flex";
 @import "assets/styles/variables/colors";
 
-.episode {
+.timecode {
   @include flex(center, flex-start, false, 16px);
   padding: 8px 0 8px 16px;
   cursor: pointer;

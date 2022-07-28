@@ -14,7 +14,7 @@ const VideoDuration = (props: props): JSX.Element => {
   const trimmedLength = getFullSeconds(props.videoLength);
   const formattedLength = formatTimestamp(trimmedLength);
 
-  const output = trimmedTime > 1000 * 3600
+  const output = trimmedTime > 1000 * 60
     ? formattedTime
     : trimmedTime > 1000
       ? `0:${formattedTime}`

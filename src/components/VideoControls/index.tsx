@@ -17,6 +17,10 @@ type props = {
   fullscreen: {
     isFullscreen: boolean,
     handleVideoFullscreen: React.MouseEventHandler,
+  },
+  mute: {
+    isMuted: boolean,
+    handleVideoMute: React.MouseEventHandler,
   }
 }
 
@@ -31,7 +35,11 @@ const VideoControls = (props: props): JSX.Element => {
               ? <VideoControlButton onClick={props.play.handleVideoPlayPause} buttonType="pause" buttonIconUrl={`${assetUrl}/icons/control-pause.svg`} />
               : <VideoControlButton onClick={props.play.handleVideoPlayPause} buttonType="play" buttonIconUrl={`${assetUrl}/icons/control-play.svg`} />
           }
-          <VideoControlButton buttonType="sound-on" buttonIconUrl={`${assetUrl}/icons/control-sound-on.svg`} />
+          {
+            props.mute.isMuted
+              ? <VideoControlButton onClick={props.mute.handleVideoMute} buttonType="mute" buttonIconUrl={`${assetUrl}/icons/control-sound-off.svg`} />
+              : <VideoControlButton onClick={props.mute.handleVideoMute} buttonType="unmute" buttonIconUrl={`${assetUrl}/icons/control-sound-on.svg`} />
+          }
           <VideoDuration videoLength={props.video.length} />
         </div>
         <div className="vp__controls__col">

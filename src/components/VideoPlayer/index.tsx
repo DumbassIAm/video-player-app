@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import VideoControls from "../VideoControls";
 import "./styles.scss";
 import { useAppDispatch, useAppSelector } from "hooks/hooks";
@@ -7,28 +7,28 @@ import { updateCurrentTime } from "reducers/video/videoTimeUpdate";
 
 const posterUrl = `${assetUrl}/main-page/poster.jpg`;
 
-const VideoPlayer = (): JSX.Element => {
+const VideoPlayer = React.forwardRef<HTMLVideoElement>((props, videoRef): JSX.Element => {
   const dispatch = useAppDispatch();
 
-  const videoRef = useRef<HTMLVideoElement>({} as HTMLVideoElement);
+  console.log(videoRef);
+
+  // const videoRef = useRef<HTMLVideoElement>({} as HTMLVideoElement);
   const videoContainerRef = useRef<HTMLDivElement>({} as HTMLDivElement);
 
   const [videoReady, setVideoReady] = useState(0);
   const [videoIsPlaying, setVideoIsPlaying] = useState(false);
   const [videoIsFullScreen, setVideoIsFullScreen] = useState(false);
+  const [videoIsMuted, setVideoIsMuted] = useState(videoRef.current.muted);
 
 
   const handleVideoLoad = (event: any): void => {
     const ready = event.target.readyState;
-
-    if (ready >= 3) {
-      setVideoReady(ready);
-    }
+    if (ready >= 3) setVideoReady(ready);
   }
 
   const handleVideoPlayPause = (): void => {
     const video = videoRef.current;
-    if (video !== null) {
+    if (video) {
       if (video.paused) {
         video.play();
         setVideoIsPlaying(true);
@@ -40,20 +40,23 @@ const VideoPlayer = (): JSX.Element => {
   }
 
   const handleVideoFullscreen = (): void => {
-    if (videoContainerRef.current) {
-      if (document.fullscreenElement) {
-        document.exitFullscreen();
-        setVideoIsFullScreen(false);
-      } else {
-        videoContainerRef.current.requestFullscreen();
-        setVideoIsFullScreen(true);
-      }
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+      setVideoIsFullScreen(false);
+    } else {
+      videoContainerRef.current.requestFullscreen();
+      setVideoIsFullScreen(true);
     }
   }
 
   const handleVideoPlaying = (): void => {
     const currentTime = videoRef.current.currentTime;
     dispatch(updateCurrentTime(currentTime));
+  }
+
+  const handleVideoMute = (): void => {
+    setVideoIsMuted(!videoIsMuted);
+    videoRef.current.muted = !videoIsMuted;
   }
 
   // props
@@ -74,11 +77,15 @@ const VideoPlayer = (): JSX.Element => {
     handleVideoFullscreen: handleVideoFullscreen,
   }
 
+  const mutedProps = {
+    isMuted: videoIsMuted,
+    handleVideoMute: handleVideoMute,
+  }
+
   return (
     <div className="vp">
       <div className="vp__video-container" ref={videoContainerRef}>
         <video
-          muted
           className="vp__video"
           ref={videoRef}
           onLoadedData={handleVideoLoad}
@@ -88,10 +95,10 @@ const VideoPlayer = (): JSX.Element => {
           poster={posterUrl}>
           <source src={videoUrl} type="video/mp4"></source>
         </video>
-        {!videoReady || <VideoControls video={video} play={playProps} fullscreen={fullscreenProps} />}
+        {!videoReady || <VideoControls video={video} mute={mutedProps} play={playProps} fullscreen={fullscreenProps} />}
       </div>
     </div>
   )
-}
+});
 
 export default VideoPlayer;
