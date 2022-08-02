@@ -1,24 +1,32 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import VideoControls from "../VideoControls";
+import useForwardedRef from "hooks/useForwardedRef";
 import "./styles.scss";
-import { useAppDispatch, useAppSelector } from "hooks/hooks";
+import { useAppDispatch } from "hooks/hooks";
 import { videoUrl, assetUrl } from "constants/urls";
-import { updateCurrentTime } from "reducers/video/videoTimeUpdate";
+import { updateCurrentTime } from "reducers/video/video";
 
 const posterUrl = `${assetUrl}/main-page/poster.jpg`;
 
-const VideoPlayer = React.forwardRef<HTMLVideoElement>((props, videoRef): JSX.Element => {
+const VideoPlayer = React.forwardRef<HTMLVideoElement>((props: {}, ref): JSX.Element => {
   const dispatch = useAppDispatch();
 
-  console.log(videoRef);
 
-  // const videoRef = useRef<HTMLVideoElement>({} as HTMLVideoElement);
+  const videoRef = useForwardedRef<HTMLVideoElement>(null);
   const videoContainerRef = useRef<HTMLDivElement>({} as HTMLDivElement);
+
+  if (videoRef.current) {
+  }
+
+  useEffect(() => {
+    console.log(videoRef.current)
+
+  }, [videoRef])
 
   const [videoReady, setVideoReady] = useState(0);
   const [videoIsPlaying, setVideoIsPlaying] = useState(false);
   const [videoIsFullScreen, setVideoIsFullScreen] = useState(false);
-  const [videoIsMuted, setVideoIsMuted] = useState(videoRef.current.muted);
+  const [videoIsMuted, setVideoIsMuted] = useState(false);
 
 
   const handleVideoLoad = (event: any): void => {
@@ -28,6 +36,8 @@ const VideoPlayer = React.forwardRef<HTMLVideoElement>((props, videoRef): JSX.El
 
   const handleVideoPlayPause = (): void => {
     const video = videoRef.current;
+    console.log(video);
+
     if (video) {
       if (video.paused) {
         video.play();
@@ -50,52 +60,57 @@ const VideoPlayer = React.forwardRef<HTMLVideoElement>((props, videoRef): JSX.El
   }
 
   const handleVideoPlaying = (): void => {
-    const currentTime = videoRef.current.currentTime;
-    dispatch(updateCurrentTime(currentTime));
+    if (videoRef.current) {
+      const currentTime = videoRef.current.currentTime;
+      dispatch(updateCurrentTime(currentTime));
+    }
   }
 
   const handleVideoMute = (): void => {
-    setVideoIsMuted(!videoIsMuted);
-    videoRef.current.muted = !videoIsMuted;
+    if (videoRef.current) {
+      setVideoIsMuted(!videoIsMuted);
+      videoRef.current.muted = !videoIsMuted;
+    }
   }
 
   // props
-  const video = {
-    length: videoRef.current.duration,
-    videoRef: videoRef.current,
-  }
+  // video
+  // const video = {
+  //   length: videoRef.current.duration,
+  //   videoRef: videoRef.current,
+  // }
 
-  // play
-  const playProps = {
-    isPlaying: videoIsPlaying,
-    handleVideoPlayPause: handleVideoPlayPause,
-  }
+  // // play
+  // const playProps = {
+  //   isPlaying: videoIsPlaying,
+  //   handleVideoPlayPause: handleVideoPlayPause,
+  // }
 
-  // fullscreen
-  const fullscreenProps = {
-    isFullscreen: videoIsFullScreen,
-    handleVideoFullscreen: handleVideoFullscreen,
-  }
+  // // fullscreen
+  // const fullscreenProps = {
+  //   isFullscreen: videoIsFullScreen,
+  //   handleVideoFullscreen: handleVideoFullscreen,
+  // }
 
-  const mutedProps = {
-    isMuted: videoIsMuted,
-    handleVideoMute: handleVideoMute,
-  }
+  // const mutedProps = {
+  //   isMuted: videoIsMuted,
+  //   handleVideoMute: handleVideoMute,
+  // }
 
   return (
     <div className="vp">
       <div className="vp__video-container" ref={videoContainerRef}>
         <video
           className="vp__video"
-          ref={videoRef}
+          ref={ref}
           onLoadedData={handleVideoLoad}
-          onTimeUpdate={handleVideoPlaying}
-          onClick={handleVideoPlayPause}
-          onDoubleClick={handleVideoFullscreen}
+          // onTimeUpdate={handleVideoPlaying}
+          // onClick={handleVideoPlayPause}
+          // onDoubleClick={handleVideoFullscreen}
           poster={posterUrl}>
           <source src={videoUrl} type="video/mp4"></source>
         </video>
-        {!videoReady || <VideoControls video={video} mute={mutedProps} play={playProps} fullscreen={fullscreenProps} />}
+        {/* {!videoReady || <VideoControls video={video} mute={mutedProps} play={playProps} fullscreen={fullscreenProps} />} */}
       </div>
     </div>
   )

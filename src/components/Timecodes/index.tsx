@@ -5,7 +5,11 @@ import "./styles.scss";
 import TimecodesInterface from "../../types";
 import sortArray from "../../utility/sortArray";
 
-const Timecodes = (): JSX.Element => {
+type props = {
+  videoRef: HTMLVideoElement | null;
+}
+
+const Timecodes = (props: props): JSX.Element => {
   const [timeCodes, setTimeCodes] = useState<TimecodesInterface[]>([] as TimecodesInterface[]);
 
   useEffect(() => {
@@ -20,7 +24,7 @@ const Timecodes = (): JSX.Element => {
   }, []);
 
   const sortedTimecodes = sortArray(timeCodes, "ascend");
-  const timecodesList = sortedTimecodes && sortedTimecodes.map((item, index) => <Timecode key={index} id={item.id} index={index + 1} timestamp={item.timestamp} />);
+  const timecodesList = sortedTimecodes && sortedTimecodes.map((item, index) => <Timecode videoRef={props.videoRef} key={index} id={item.id} index={index + 1} timestamp={item.timestamp} />);
 
   return (
     <div className="timecodes">

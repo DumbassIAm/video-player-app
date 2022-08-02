@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "hooks/hooks";
 import React, { CSSProperties } from "react";
-import { updateCurrentTime } from "reducers/video/videoTimeUpdate";
+import { updateCurrentTime } from "reducers/video/video";
 import "./styles.scss";
 
 type props = {

@@ -1,12 +1,13 @@
 import "./styles.scss";
 import formatTimestamp from "utility/formatTimestamp";
 import { useAppDispatch } from "hooks/hooks";
-import { updateCurrentTime } from "reducers/video/videoTimeUpdate";
+import { updateCurrentTime } from "reducers/video/video";
 
 type props = {
   index: number,
   id: number,
   timestamp: number,
+  videoRef: HTMLVideoElement | null;
 }
 
 const Timecode = (props: props): JSX.Element => {
@@ -16,6 +17,11 @@ const Timecode = (props: props): JSX.Element => {
 
   const handleClick = (event: React.MouseEvent): void => {
     const newVideoTime = props.timestamp / 1000;
+
+    if (props.videoRef) {
+      console.log(1);
+      props.videoRef.currentTime = newVideoTime;
+    }
 
     dispatch(updateCurrentTime(newVideoTime));
   }
